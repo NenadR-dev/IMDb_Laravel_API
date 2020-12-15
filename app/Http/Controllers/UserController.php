@@ -6,9 +6,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
+
+    protected $userService;
+
+    public function __construct(UserService $service)
+    {
+        $this->userService = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +45,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        return User::create([
+        return $this->userService->addUser([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password'))
@@ -86,6 +94,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        return $user->delete() ? $user : [];
+        return $this->userService->deleteUser($user);
     }
 }

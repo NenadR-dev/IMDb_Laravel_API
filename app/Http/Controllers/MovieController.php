@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
+use App\Services\MovieService;
 
 class MovieController extends Controller
 {
+
+    protected $movieService;
+
+    public function __construct(MovieService $service)
+    {
+        $this->movieService = $service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,7 +45,7 @@ class MovieController extends Controller
      */
     public function store(MovieRequest $request)
     {
-        return Movie::create($request->only(['title','description','imageCover','genre']));
+        return $this->movieService->addMovie($request->only(['title','description','imageCover','genre']));
     }
 
     /**
@@ -45,7 +54,7 @@ class MovieController extends Controller
      * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function show(MovieRequest $movie)
+    public function show(Movie $movie)
     {
         return $movie;
     }
@@ -70,7 +79,7 @@ class MovieController extends Controller
      */
     public function update(MovieRequest $request, Movie $movie)
     {
-        return $movie->update($request->only(['title','description','imageCover','genre'])) ? $movie : [];
+        return $this->movieService->updateMovie($request->only(['title','description','imageCover','genre']), $movie);
     }
 
     /**
@@ -81,6 +90,6 @@ class MovieController extends Controller
      */
     public function destroy(Movie $movie)
     {
-        return $movie->delete() ? $movie : [];
+        return $this->movieService->deleteMovie($movie);
     }
 }
