@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Movie;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
-use App\Services\UserService;
+use App\Http\Requests\MovieRequest;
+use App\Services\MovieService;
 
-class UserController extends Controller
+class MovieController extends Controller
 {
 
-    protected $userService;
+    protected $movieService;
 
-    public function __construct(UserService $service)
+    public function __construct(MovieService $service)
     {
-        $this->userService = $service;
+        $this->movieService = $service;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return Movie::all();
     }
 
     /**
@@ -43,33 +43,29 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(MovieRequest $request)
     {
-        return $this->userService->addUser([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password'))
-        ]);
+        return $this->movieService->addMovie($request->only(['title','description','imageCover','genre']));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Movie $movie)
     {
-        return $user;
+        return $movie;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Movie $movie)
     {
         //
     }
@@ -78,22 +74,22 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(MovieRequest $request, Movie $movie)
     {
-        //
+        return $this->movieService->updateMovie($request->only(['title','description','imageCover','genre']), $movie);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Movie  $movie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Movie $movie)
     {
-        return $this->userService->deleteUser($user);
+        return $this->movieService->deleteMovie($movie);
     }
 }
