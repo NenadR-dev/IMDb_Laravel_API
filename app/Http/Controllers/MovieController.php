@@ -25,7 +25,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return DB::table('movies')->paginate(3);
+        return DB::table('movies')->paginate(5);
     }
 
     /**
