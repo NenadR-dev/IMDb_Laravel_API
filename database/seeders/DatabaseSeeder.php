@@ -22,35 +22,36 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('nenad12345'),
             'email_verified_at' => now(),
         ]);
+        $path = 'http://localhost:8000/storage/';
         Movie::insert([
             [
                 'title' => 'Hobbit',
                 'description' => 'An unexpecred journey following our protagonist Bilbo Beggins and the wizard Gandalf the Grey',
-                'imageCover' => 'https://m.media-amazon.com/images/M/MV5BMTcwNTE4MTUxMl5BMl5BanBnXkFtZTcwMDIyODM4OA@@._V1_UY1200_CR90,0,630,1200_AL_.jpg',
+                'imageCover' => $path.'movies/Hobbit.jpg',
                 'genre' => 'adventure'
             ],
             [
                 'title' => 'Saw',
                 'description' => 'Mistery murders and stuff. Super scary',
-                'imageCover' => 'https://i.ytimg.com/vi/nCqAXtploOg/maxresdefault.jpg',
+                'imageCover' => $path.'movies/Saw.jpg',
                 'genre' => 'horror'
             ],
             [
                 'title' => 'Harry Potter',
                 'description' => 'Wizards fighting their arch nemesis. The one who shall not be named',
-                'imageCover' => 'https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_.jpg',
+                'imageCover' => $path.'movies/HarryPotter.jpg',
                 'genre' => 'adventure'
             ],
             [
                 'title' => 'Allita Battle Angel',
                 'description' => 'Robot fights',
-                'imageCover' => 'https://upload.wikimedia.org/wikipedia/en/e/ee/Alita_Battle_Angel_%282019_poster%29.png',
+                'imageCover' => $path.'movies/Alita_Battle_Angel_(2019_poster).png',
                 'genre' => 'action'
             ],
             [
                 'title' => 'Lord of the rings trilogy',
                 'description' => 'Little hobbits venture on a new adventures',
-                'imageCover' => 'https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_.jpg',
+                'imageCover' => $path.'movies/LordOfTherRings.jpg',
                 'genre' => 'adventure'
             ]
         ]);

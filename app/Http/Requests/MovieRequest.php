@@ -26,7 +26,7 @@ class MovieRequest extends FormRequest
         return [
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:20', 'max:255'],
-            'imageCover' => ['required'],
+            'imageCover' => ['required','image:jpeg,png,jpg,gif,svg','max:2048'],
             'genre' => ['required']
         ];
     }
