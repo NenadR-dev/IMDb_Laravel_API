@@ -6,6 +6,7 @@ use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
 use App\Services\MovieService;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
@@ -24,7 +25,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return Movie::all();
+        return DB::table('movies')->paginate(5);
     }
 
     /**
