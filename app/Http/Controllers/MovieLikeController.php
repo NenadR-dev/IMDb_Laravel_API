@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
-use App\Services\UserService;
+use App\Http\Requests\LikeRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class MovieLikeController extends Controller
 {
-
-    protected $userService;
-
-    public function __construct(UserService $service)
+    public function __construct()
     {
-        $this->userService = $service;
+        $this->middleware('auth:api');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        //
     }
 
     /**
@@ -43,33 +39,32 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(LikeRequest $request)
     {
-        return $this->userService->addUser([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password'))
-        ]);
+        $user = Auth::user();
+        $user->Movies()->attach($request->get('movieId'), ['liked' => $request->get('liked')]);
+        info($user);
+        return 'ok';
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return $user;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
         //
     }
@@ -78,23 +73,27 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(Request $request, $id)
     {
-        //$user->movies()->attach($movie->id);
-        //$user->movies()->insert();
+        $user = Auth::user();
+        $user->Movies()->updateExistingPivot($id, [
+            'liked' => $request->get('liked')
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        return $this->userService->deleteUser($user);
+        
+        $user = Auth::user();
+        $user->Movies()->detach($id);
     }
 }
