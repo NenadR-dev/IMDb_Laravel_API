@@ -26,7 +26,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return DB::table('movies')->paginate(3);
+        return Movie::paginate(3);
     }
 
     /**
@@ -58,13 +58,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $retData = [
-          'title' => $movie['title'],
-          'description' => $movie['description'],
-          'genre' => $movie['genre'],
-          'imageCover' => $movie['imageCover']
-        ];
-        return $retData;
+        return $movie;
     }
 
     /**
