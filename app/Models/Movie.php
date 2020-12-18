@@ -9,6 +9,16 @@ class Movie extends Model
 {
     use HasFactory;
 
+    public function Comments()
+    {
+        return $this->belongsToMany(User::class, 'comment')->withPivot('comment_text');
+    }
+
+    public function MovieComments()
+    {
+        return $this->hasMany(Comment::class, 'movie_id');
+    }
+
     public function Users()
     {
         return $this->belongsToMany(User::class, 'user_movie')->withPivot('liked');

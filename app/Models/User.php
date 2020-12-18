@@ -12,7 +12,16 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    public function Comments()
+    {
+        return $this->belongsToMany(Movie::class, 'comment')->withPivot('comment_text');
+    }
 
+    public function MovieComments()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+    
     public function Movies()
     {
         return $this->belongsToMany(Movie::class, 'user_movie')->withPivot('liked');

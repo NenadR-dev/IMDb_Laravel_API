@@ -28,7 +28,7 @@ class MovieController extends Controller
     {
         if($request->get('filter') == null || $request->get('filter') == 'all')
         {
-            return Movie::with('likes')->paginate(3);
+            return Movie::with('likes','moviecomments')->paginate(3);
             
         }
         else 

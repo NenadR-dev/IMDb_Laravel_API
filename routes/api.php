@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\MovieLikeController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,6 +43,7 @@ Route::group([
         Route::post('likeDislike', [UserController::class], 'LikeDislikeMovie');
     });
     Route::resources([
-        'likeMovie' => MovieLikeController::class
+        'likeMovie' => MovieLikeController::class,
+        'commentMovie' => CommentController::class
     ]);
 });
