@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Movie;
 use App\Http\Requests\MovieRequest;
-
+use Illuminate\Support\Facades\Storage;
 use App\Interfaces\MovieServiceInterface;
 
 class MovieService implements MovieServiceInterface 
@@ -16,7 +16,13 @@ class MovieService implements MovieServiceInterface
 
     public function addMovie($movie)
     {
-        return Movie::create($movie);
+        $path = Storage::disk('public')->put('movies', $movie['imageCover']);
+        return Movie::create([
+            'title' => $movie['title'],
+            'description' => $movie['description'],
+            'genre' => $movie['genre'],
+            'imageCover' => asset('storage/'.$path)
+        ]);
     }
 
     public function deleteMovie($movie)

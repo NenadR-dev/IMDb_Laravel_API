@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
-use App\Services\UserService;
+use App\Http\Requests\LikeRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Movie;
 
-class UserController extends Controller
+class MovieLikeController extends Controller
 {
-
-    protected $userService;
-
-    public function __construct(UserService $service)
+    public function __construct()
     {
-        $this->userService = $service;
+        $this->middleware('auth:api');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return Auth::user()->Likes()->get(['movie_id', 'liked']);
     }
 
     /**
@@ -43,33 +40,31 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(LikeRequest $request)
     {
-        return $this->userService->addUser([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password'))
-        ]);
+        $user = Auth::user();
+        $user->Movies()->syncWithoutDetaching([$request->get('movieId') => ['liked' => $request->get('liked')]]);
+        return $user->Movies()->find($request->get('movieId'))->only('pivot');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        return $user;
+        return Auth::user()->Likes()->find($id)->only('liked');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
         //
     }
@@ -78,23 +73,25 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, User $user)
+    public function update(Request $request, Movie $likeMovie)
     {
-        //$user->movies()->attach($movie->id);
-        //$user->movies()->insert();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        return $this->userService->deleteUser($user);
+        $user = Auth::user();
+        $targetMovie = $user->Movies()->find($id)->only('pivot');
+        $user->Movies()->detach($id);
+        return $targetMovie;
     }
 }

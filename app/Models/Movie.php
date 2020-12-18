@@ -9,6 +9,16 @@ class Movie extends Model
 {
     use HasFactory;
 
+    public function Users()
+    {
+        return $this->belongsToMany(User::class, 'user_movie')->withPivot('liked');
+    }
+
+    public function Likes()
+    {
+        return $this->hasMany(UserMovie::class, 'movie_id');
+    }
+
     protected $fillable = [
         'title',
         'description',

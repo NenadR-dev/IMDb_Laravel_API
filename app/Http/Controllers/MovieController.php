@@ -8,6 +8,7 @@ use App\Http\Requests\MovieRequest;
 use App\Services\MovieService;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Storage;
 class MovieController extends Controller
 {
 
@@ -25,7 +26,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return DB::table('movies')->paginate(5);
+        return Movie::with('likes')->paginate(3);
     }
 
     /**
@@ -57,7 +58,13 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        return $movie;
+        $retData = [
+          'title' => $movie['title'],
+          'description' => $movie['description'],
+          'genre' => $movie['genre'],
+          'imageCover' => $movie['imageCover']
+        ];
+        return $retData;
     }
 
     /**

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\MovieLikeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +26,7 @@ Route::resources([
     'movies' => MovieController::class
 ]);
 
+
 Route::group([
     'prefix' => 'auth'
 
@@ -38,6 +40,9 @@ Route::group([
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('me', [AuthController::class, 'me']);
+        Route::post('likeDislike', [UserController::class], 'LikeDislikeMovie');
     });
-
+    Route::resources([
+        'likeMovie' => MovieLikeController::class
+    ]);
 });
