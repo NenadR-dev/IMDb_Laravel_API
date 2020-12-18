@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LikeRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Movie;
 
 class MovieLikeController extends Controller
 {
@@ -43,7 +44,6 @@ class MovieLikeController extends Controller
     {
         $user = Auth::user();
         $user->Movies()->attach($request->get('movieId'), ['liked' => $request->get('liked')]);
-        info($user);
         return 'ok';
     }
 
@@ -76,10 +76,10 @@ class MovieLikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Movie $likeMovie)
     {
         $user = Auth::user();
-        $user->Movies()->updateExistingPivot($id, [
+        $user->Movies()->updateExistingPivot($likeMovie->id, [
             'liked' => $request->get('liked')
         ]);
     }
@@ -92,7 +92,6 @@ class MovieLikeController extends Controller
      */
     public function destroy($id)
     {
-        
         $user = Auth::user();
         $user->Movies()->detach($id);
     }

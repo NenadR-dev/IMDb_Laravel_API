@@ -23,9 +23,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resources([
     'user' => UserController::class,
-    'movies' => MovieController::class,
-    'likeMovie' => MovieLikeController::class
+    'movies' => MovieController::class
 ]);
+
 
 Route::group([
     'prefix' => 'auth'
@@ -42,5 +42,7 @@ Route::group([
         Route::post('me', [AuthController::class, 'me']);
         Route::post('likeDislike', [UserController::class], 'LikeDislikeMovie');
     });
-
+    Route::resources([
+        'likeMovie' => MovieLikeController::class
+    ]);
 });
