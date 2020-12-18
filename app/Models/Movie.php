@@ -23,6 +23,7 @@ class Movie extends Model
         'title',
         'description',
         'imageCover',
-        'genre'
+        'genre',
+        'visited'
     ];
 }
