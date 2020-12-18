@@ -43,8 +43,8 @@ class MovieLikeController extends Controller
     public function store(LikeRequest $request)
     {
         $user = Auth::user();
-        $user->Movies()->attach($request->get('movieId'), ['liked' => $request->get('liked')]);
-        return 'ok';
+        $user->Movies()->syncWithoutDetaching([$request->get('movieId') => ['liked' => $request->get('liked')]]);
+        return $user->Movies()->find($request->get('movieId'));
     }
 
     /**
