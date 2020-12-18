@@ -58,13 +58,8 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $retData = [
-          'title' => $movie['title'],
-          'description' => $movie['description'],
-          'genre' => $movie['genre'],
-          'imageCover' => $movie['imageCover']
-        ];
-        return $retData;
+        $movie->update(['visited' => $movie->visited + 1]);
+        return $movie;
     }
 
     /**
