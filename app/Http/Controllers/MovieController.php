@@ -24,9 +24,17 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Movie::with('likes')->paginate(3);
+        if($request->get('filter') == null || $request->get('filter') == 'all')
+        {
+            return Movie::with('likes')->paginate(3);
+            
+        }
+        else 
+        {
+            return Movie::with('likes')->where('genre',$request->get('filter'))->paginate(3);
+        }
     }
 
     /**
