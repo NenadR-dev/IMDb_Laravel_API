@@ -21,7 +21,7 @@ class MovieLikeController extends Controller
      */
     public function index()
     {
-        //
+        return Auth::user()->Likes()->get(['movie_id', 'liked']);
     }
 
     /**
@@ -44,7 +44,7 @@ class MovieLikeController extends Controller
     {
         $user = Auth::user();
         $user->Movies()->syncWithoutDetaching([$request->get('movieId') => ['liked' => $request->get('liked')]]);
-        return $user->Movies()->find($request->get('movieId'));
+        return $user->Movies()->find($request->get('movieId'))->only('pivot');
     }
 
     /**
@@ -55,7 +55,7 @@ class MovieLikeController extends Controller
      */
     public function show($id)
     {
-        //
+        return Auth::user()->Likes()->find($id)->only('liked');
     }
 
     /**
@@ -78,10 +78,7 @@ class MovieLikeController extends Controller
      */
     public function update(Request $request, Movie $likeMovie)
     {
-        $user = Auth::user();
-        $user->Movies()->updateExistingPivot($likeMovie->id, [
-            'liked' => $request->get('liked')
-        ]);
+        //
     }
 
     /**
@@ -93,6 +90,8 @@ class MovieLikeController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
+        $targetMovie = $user->Movies()->find($id)->only('pivot');
         $user->Movies()->detach($id);
+        return $targetMovie;
     }
 }
