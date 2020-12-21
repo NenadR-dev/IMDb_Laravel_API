@@ -26,17 +26,7 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->get('filter') == null || $request->get('filter') == 'all')
-        {
-            return Movie::with('likes')->with(['comments' => function($q) {
-                $q->where('user_id', 1)->paginate(2);
-            }])->paginate(3);
-            
-        }
-        else 
-        {
-            return Movie::with('likes','comments')->where('genre',$request->get('filter'))->paginate(3);
-        }
+        return $this->movieService->filterMovies($request->get('filterBy'), $request->get('filter'));
     }
 
     /**

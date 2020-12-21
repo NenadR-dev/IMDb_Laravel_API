@@ -35,7 +35,6 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        info($request);
         return Comment::create([
             'comment_text' => $request->get('comment'),
             'movie_id' => $request->get('movieId'),
