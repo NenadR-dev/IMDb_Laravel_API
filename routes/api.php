@@ -26,7 +26,6 @@ Route::resources([
     'movies' => MovieController::class
 ]);
 
-
 Route::group([
     'prefix' => 'auth'
 
