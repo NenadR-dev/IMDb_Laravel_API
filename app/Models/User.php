@@ -12,6 +12,17 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+
+    public function Movies()
+    {
+        return $this->belongsToMany(Movie::class, 'user_movie')->withPivot('liked');
+    }
+
+    public function Likes()
+    {
+        return $this->hasMany(UserMovie::class, 'user_id');
+    }
+
         /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
