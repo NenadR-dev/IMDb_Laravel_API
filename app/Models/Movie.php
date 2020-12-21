@@ -11,11 +11,6 @@ class Movie extends Model
 
     public function Comments()
     {
-        return $this->belongsToMany(User::class, 'comment')->withPivot('comment_text');
-    }
-
-    public function MovieComments()
-    {
         return $this->hasMany(Comment::class, 'movie_id');
     }
 

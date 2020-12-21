@@ -28,12 +28,14 @@ class MovieController extends Controller
     {
         if($request->get('filter') == null || $request->get('filter') == 'all')
         {
-            return Movie::with('likes','moviecomments')->paginate(3);
+            return Movie::with('likes')->with(['comments' => function($q) {
+                $q->where('user_id', 1)->paginate(2);
+            }])->paginate(3);
             
         }
         else 
         {
-            return Movie::with('likes')->where('genre',$request->get('filter'))->paginate(3);
+            return Movie::with('likes','comments')->where('genre',$request->get('filter'))->paginate(3);
         }
     }
 
@@ -67,7 +69,7 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         $movie->update(['visited' => $movie->visited + 1]);
-        return $movie;
+        return $movie->load('comments');
     }
 
     /**

@@ -14,11 +14,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function Comments()
     {
-        return $this->belongsToMany(Movie::class, 'comment')->withPivot('comment_text');
-    }
-
-    public function MovieComments()
-    {
         return $this->hasMany(Comment::class, 'user_id');
     }
     

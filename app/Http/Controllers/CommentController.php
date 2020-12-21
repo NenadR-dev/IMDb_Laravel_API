@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Comment;
 class CommentController extends Controller
 {
     /**
@@ -12,9 +12,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return Comment::where('movie_id', $request->get('movie_id'))->paginate(2);
     }
 
     /**
@@ -35,8 +35,11 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        return Auth::user()->comments()->attach($request->get('movie_id'), [
-            'comment_text' => $request->get('comment')
+        info($request);
+        return Comment::create([
+            'comment_text' => $request->get('comment'),
+            'movie_id' => $request->get('movieId'),
+            'user_id' => Auth::user()->id
         ]);
     }
 
