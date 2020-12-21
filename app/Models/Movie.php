@@ -11,7 +11,7 @@ class Movie extends Model
 
     public function Users()
     {
-        return $this->belongsToMany(User::class, 'user_movie')->withPivot('liked');
+        return $this->belongsToMany(User::class, 'user_movie')->withPivot(['liked', 'disliked']);
     }
 
     public function Likes()

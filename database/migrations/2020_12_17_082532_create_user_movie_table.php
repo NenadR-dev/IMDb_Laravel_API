@@ -17,7 +17,8 @@ class CreateUserMovieTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('movie_id');
-            $table->boolean('liked');
+            $table->boolean('liked')->default('0');
+            $table->boolean('disliked')->default('0');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('movie_id')->references('id')->on('movies');
             $table->timestamps();
