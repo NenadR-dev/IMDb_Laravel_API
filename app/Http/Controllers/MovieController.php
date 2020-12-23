@@ -59,7 +59,7 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         $movie->update(['visited' => $movie->visited + 1]);
-        return $movie;
+        return $movie->load('comments');
     }
 
     /**
