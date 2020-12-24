@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {
-        return Comment::where('movie_id', $request->get('movie_id'))->paginate(2);
+        return Comment::where('movie_id', $request->get('movie_id'))->paginate(10);
     }
 
     /**
