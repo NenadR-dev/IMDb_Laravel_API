@@ -14,7 +14,7 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {
-        return Comment::where('movie_id', $request->get('movie_id'))->paginate(10);
+        return Comment::all();
     }
 
     /**
@@ -50,7 +50,7 @@ class CommentController extends Controller
      */
     public function show($id)
     {
-        //
+        return Comment::where('movie_id', $id)->paginate(5);
     }
 
     /**
@@ -61,7 +61,7 @@ class CommentController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Comment::find($id);
     }
 
     /**
