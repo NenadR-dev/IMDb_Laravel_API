@@ -6,9 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LikeRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
+use App\Services\MovieLikeService;
 
 class MovieLikeController extends Controller
 {
+    private $likeService;
+
+    public function __construct(MovieLikeService $service) {
+        $this->likeService = $service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -37,9 +44,7 @@ class MovieLikeController extends Controller
      */
     public function store(LikeRequest $request)
     {
-        $user = Auth::user();
-        $user->Movies()->syncWithoutDetaching([$request->get('movieId') => ['liked' => $request->get('liked')]]);
-        return $user->Movies()->find($request->get('movieId'))->only('pivot');
+        return $this->likeService->addMovieLike($request->only('movieId','liked'));
     }
 
     /**
@@ -50,7 +55,7 @@ class MovieLikeController extends Controller
      */
     public function show($id)
     {
-        return Auth::user()->Likes()->find($id)->only('liked');
+        return $this->likeService->getLikes($id);
     }
 
     /**
@@ -84,9 +89,6 @@ class MovieLikeController extends Controller
      */
     public function destroy($id)
     {
-        $user = Auth::user();
-        $targetMovie = $user->Movies()->find($id)->only('pivot');
-        $user->Movies()->detach($id);
-        return $targetMovie;
+        return $this->likeService->removeMovieLike($id);
     }
 }

@@ -43,9 +43,7 @@ class WatchListController extends Controller
      */
     public function store(WatchListRequest $request)
     {
-        $user = Auth::user();
-        $user->Watched()->attach([$request->get('movieId') => ['watched' => $request->get('watched')]]);
-        return $user->Watched()->find($request->get('movieId'))->only('pivot');
+        return $this->watchlistService->addToWatchlist($request->validated());
     }
 
     /**
@@ -90,8 +88,6 @@ class WatchListController extends Controller
      */
     public function destroy($id)
     {
-        $user = Auth::user();
-        $user->Watched()->where('movie_id',$id)->detach();
-        return $user->Watched()->first();
+        return $this->watchlistService->deleteFromWatchlist($id);
     }
 }

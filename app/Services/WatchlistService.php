@@ -22,7 +22,7 @@ class WatchlistService implements WatchlistInterface
     public function deleteFromWatchlist($id)
     {
         $user = Auth::user();
-        $user->Watched()->where('movie_id',$id)->detach();
+        $user->Watched()->detach($id);
         return $user->Watched()->first();
     }
 }
