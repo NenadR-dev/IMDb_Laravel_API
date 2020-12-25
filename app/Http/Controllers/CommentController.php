@@ -5,8 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
+use App\Http\Requests\CommentRequest;
+use App\Services\CommentService;
 class CommentController extends Controller
 {
+    private $commentService;
+
+    public function __construct(CommentService $service) {
+        $this->commentService = $service;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,13 +40,9 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        return Comment::create([
-            'comment_text' => $request->get('comment'),
-            'movie_id' => $request->get('movieId'),
-            'user_id' => Auth::user()->id
-        ]);
+        return $this->commentService->addComment($request->validated());
     }
 
     /**
@@ -50,8 +53,7 @@ class CommentController extends Controller
      */
     public function show(Request $request,$id)
     {
-        $paginateBy = $request->get('paginateBy');
-        return Comment::where('movie_id', $id)->paginate($paginateBy != null ? $paginateBy : 5);
+        return $this->commentService->paginateComments($id, $request->get('paginateBy'));
     }
 
     /**
