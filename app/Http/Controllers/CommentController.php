@@ -48,9 +48,10 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        return Comment::where('movie_id', $id)->paginate(5);
+        $paginateBy = $request->get('paginateBy');
+        return Comment::where('movie_id', $id)->paginate($paginateBy != null ? $paginateBy : 5);
     }
 
     /**
