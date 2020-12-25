@@ -26,7 +26,11 @@ class MovieController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->movieService->filterMovies($request->get('filterBy'), $request->get('filter'));
+        return $this->movieService->filterMovies(
+            $request->get('filterBy'),
+            $request->get('filter'),
+            $request->get('paginateBy')
+        );
     }
 
     /**
@@ -58,8 +62,7 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie->update(['visited' => $movie->visited + 1]);
-        return $movie->with('watchlist')->where('id',$movie->id)->first();
+        return $this->movieService->incrementVisitedCount($movie);
     }
 
     /**
