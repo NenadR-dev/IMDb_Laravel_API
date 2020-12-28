@@ -18,6 +18,10 @@ class MovieService implements MovieServiceInterface
 
     public function filterMovies($filterBy, $filter, $paginateBy)
     {
+        if($filterBy == 'popular') 
+        {
+            return Movie::withCount('likes')->orderBy('likes_count','desc')->take(10)->get();
+        }
         if($filter == null || $filter == 'all')
         {
             return Movie::with('likes','watchlist')->paginate($paginateBy != null ? $paginateBy : 6);

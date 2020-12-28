@@ -22,7 +22,7 @@ class WatchListController extends Controller
      */
     public function index()
     {
-        return Auth::user()->with('watched')->first();
+        return Auth::user()->with('watched')->where('id',Auth::user()->id)->first();
     }
 
     /**
