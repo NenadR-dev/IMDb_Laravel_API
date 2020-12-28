@@ -22,7 +22,7 @@ class MovieService implements MovieServiceInterface
         {
             return Movie::with('likes','watchlist')->paginate($paginateBy != null ? $paginateBy : 6);
         }
-        return Movie::with('likes')->where($filterBy, $filter)->paginate($paginateBy != null ? $paginateBy : 6);
+        return Movie::with('likes','watchlist')->where($filterBy, $filter)->paginate($paginateBy != null ? $paginateBy : 6);
     }
 
     public function updateMovie($data, Movie $movie)
