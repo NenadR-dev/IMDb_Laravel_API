@@ -3,20 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\LikeRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Movie;
-
-class MovieLikeController extends Controller
+use App\Models\Comment;
+use App\Http\Requests\CommentRequest;
+use App\Services\CommentService;
+class CommentController extends Controller
 {
+    private $commentService;
+
+    public function __construct(CommentService $service) {
+        $this->commentService = $service;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Auth::user()->Likes()->get(['movie_id', 'liked']);
+        return Comment::all();
     }
 
     /**
@@ -35,14 +40,9 @@ class MovieLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LikeRequest $request)
+    public function store(CommentRequest $request)
     {
-        $user = Auth::user();
-        $user->Movies()->syncWithoutDetaching([$request->get('movieId') => [
-            'liked' => $request->get('liked'),
-            'disliked' => $request->get('disliked')
-            ]]);
-        return $user->Movies()->find($request->get('movieId'))->only('pivot');
+        return $this->commentService->addComment($request->validated());
     }
 
     /**
@@ -51,9 +51,9 @@ class MovieLikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        return Auth::user()->Likes()->find($id)->only(['liked','disliked']);
+        return $this->commentService->paginateComments($id, $request->get('paginateBy'));
     }
 
     /**
@@ -64,7 +64,7 @@ class MovieLikeController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Comment::find($id);
     }
 
     /**
@@ -74,7 +74,7 @@ class MovieLikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Movie $likeMovie)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -87,9 +87,6 @@ class MovieLikeController extends Controller
      */
     public function destroy($id)
     {
-        $user = Auth::user();
-        $targetMovie = $user->Movies()->find($id)->only('pivot');
-        $user->Movies()->detach($id);
-        return $targetMovie;
+        //
     }
 }

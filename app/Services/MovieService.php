@@ -7,8 +7,17 @@ use App\Http\Requests\MovieRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Interfaces\MovieServiceInterface;
 
-class MovieService implements MovieServiceInterface 
+class MovieService implements MovieServiceInterface
 {
+    public function filterMovies($filterBy, $filter)
+    {
+        if($filter == null || $filter == 'all')
+        {
+            return Movie::with('likes')->paginate(3);
+        }
+        return Movie::with('likes')->where($filterBy, $filter)->paginate(3);
+    }
+
     public function updateMovie($data, Movie $movie)
     {
         return $movie->update($data) ? $movie : [];
