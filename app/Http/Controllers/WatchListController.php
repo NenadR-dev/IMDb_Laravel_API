@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\LikeRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Movie;
-use App\Services\MovieLikeService;
+use App\Http\Requests\WatchListRequest;
+use App\Services\WatchlistService;
 
-class MovieLikeController extends Controller
+class WatchListController extends Controller
 {
-    private $likeService;
+    private $watchlistService;
 
-    public function __construct(MovieLikeService $service) {
-        $this->likeService = $service;
+    public function __construct(WatchlistService $service) {
+        $this->watchlistService = $service;
     }
-    
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +22,7 @@ class MovieLikeController extends Controller
      */
     public function index()
     {
-        return Auth::user()->Likes()->get(['movie_id', 'liked']);
+        return Auth::user()->with('watched')->first();
     }
 
     /**
@@ -42,9 +41,9 @@ class MovieLikeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LikeRequest $request)
+    public function store(WatchListRequest $request)
     {
-        return $this->likeService->addMovieLike($request->only('movieId','liked'));
+        return $this->watchlistService->addToWatchlist($request->validated());
     }
 
     /**
@@ -55,7 +54,7 @@ class MovieLikeController extends Controller
      */
     public function show($id)
     {
-        return $this->likeService->getLikes($id);
+        return Auth::user()->with('watchlist')->first();
     }
 
     /**
@@ -76,9 +75,9 @@ class MovieLikeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Movie $likeMovie)
+    public function update(WatchListRequest $request, $id)
     {
-        //
+        return $this->watchlistService->updateWatchlist($id, $request->only('watched'));
     }
 
     /**
@@ -89,6 +88,6 @@ class MovieLikeController extends Controller
      */
     public function destroy($id)
     {
-        return $this->likeService->removeMovieLike($id);
+        return $this->watchlistService->deleteFromWatchlist($id);
     }
 }
