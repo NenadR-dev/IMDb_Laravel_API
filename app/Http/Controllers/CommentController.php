@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
+use App\Http\Requests\CommentRequest;
 use App\Services\CommentService;
-
 class CommentController extends Controller
 {
     private $commentService;
@@ -40,9 +40,9 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        return $this->commentService->addComment($request->only('movieId','comment'));
+        return $this->commentService->addComment($request->validated());
     }
 
     /**
@@ -51,9 +51,9 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request,$id)
     {
-        return$this->commentService->getComments($id, $request->get('paginateBy'));
+        return $this->commentService->paginateComments($id, $request->get('paginateBy'));
     }
 
     /**

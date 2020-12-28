@@ -7,5 +7,5 @@ use App\Models\Movie;
 interface CommentServiceInterface
 {
     public function addComment($data);
-    public function getComments($id, $paginateBy);
+    public function paginateComments($id, $paginateBy);
 }
