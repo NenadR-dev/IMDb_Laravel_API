@@ -7,9 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Services\EmailService;
 
-class SendMovieEmail
+class SendMovieEmail implements ShouldQueue
 {
     private $emailService;
+    public $connection = 'beanstalkd';
     /**
      * Create the event listener.
      *
