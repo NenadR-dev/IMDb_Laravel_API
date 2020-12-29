@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
 use App\Services\MovieService;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Storage;
 class MovieController extends Controller
 {

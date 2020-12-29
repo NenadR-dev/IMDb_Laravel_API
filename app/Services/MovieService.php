@@ -7,9 +7,11 @@ use App\Http\Requests\MovieRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\MovieServiceInterface;
+use App\Events\MovieProcessed;
 
 class MovieService implements MovieServiceInterface
 {
+
     public function incrementVisitedCount($movie)
     {
         $movie->update(['visited' => $movie->visited + 1]);
@@ -37,12 +39,14 @@ class MovieService implements MovieServiceInterface
     public function addMovie($movie)
     {
         $path = Storage::disk('public')->put('movies', $movie['imageCover']);
-        return Movie::create([
+        $movieAdded = Movie::create([
             'title' => $movie['title'],
             'description' => $movie['description'],
             'genre' => $movie['genre'],
             'imageCover' => asset('storage/'.$path)
-        ]);
+            ]);
+        MovieProcessed::dispatch($movieAdded);
+        return $movieAdded;
     }
 
     public function deleteMovie($movie)
