@@ -31,4 +31,9 @@ class SendMovieEmail implements ShouldQueue
     {
         $this->emailService->sendMail($event->movie);
     }
+
+    public function failed(MovieProcessed $event, $exception)
+    {
+        return "JOB FAILED";
+    }
 }
