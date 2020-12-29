@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\WatchListRequest;
 use App\Services\WatchlistService;
+use App\Models\WatchList;
 
 class WatchListController extends Controller
 {
@@ -22,7 +23,7 @@ class WatchListController extends Controller
      */
     public function index()
     {
-        return Auth::user()->with('watched')->first();
+        return Auth::user()->Watched()->get();
     }
 
     /**
