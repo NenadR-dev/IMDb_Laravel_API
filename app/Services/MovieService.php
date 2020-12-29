@@ -7,17 +7,10 @@ use App\Http\Requests\MovieRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\MovieServiceInterface;
-use Illuminate\Support\Facades\Mail;
-use App\Services\EmailService;
+use App\Events\MovieProcessed;
 
 class MovieService implements MovieServiceInterface
 {
-
-    private $emailService;
-
-    public function __construct(EmailService $emailService) {
-        $this->emailService = $emailService;
-    }
 
     public function incrementVisitedCount($movie)
     {
@@ -52,7 +45,7 @@ class MovieService implements MovieServiceInterface
             'genre' => $movie['genre'],
             'imageCover' => asset('storage/'.$path)
             ]);
-        $this->emailService->sendMail($movieAdded);
+        MovieProcessed::dispatch($movieAdded);
         return $movieAdded;
     }
 
