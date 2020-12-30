@@ -9,11 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "elasticsearch/elasticsearch": "^7.10",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
+        "laravel/scout": "^8.5",
         "laravel/tinker": "^2.5",
+        "matchish/laravel-scout-elasticsearch": "^4.0",
+        "ongr/elasticsearch-dsl": "^7.2",
         "pda/pheanstalk": "^4.0",
         "tymon/jwt-auth": "^1.0"
     },

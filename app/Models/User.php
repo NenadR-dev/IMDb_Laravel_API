@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Searchable;
 
 
     public function Watched()
@@ -26,6 +27,10 @@ class User extends Authenticatable implements JWTSubject
     public function Comments()
     {
         return $this->hasMany(Comment::class, 'user_id');
+    }
+    public function searchableAs()
+    {
+        return 'users_index';
     }
     
     public function Movies()
