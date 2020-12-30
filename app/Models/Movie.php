@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Laravel\Scout\Searchable;
 class Movie extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     public function Watched()
     {
@@ -32,6 +32,11 @@ class Movie extends Model
     public function Likes()
     {
         return $this->hasMany(UserMovie::class, 'movie_id');
+    }
+
+    public function searchableAs()
+    {
+        return 'movies_index';
     }
 
     protected $fillable = [

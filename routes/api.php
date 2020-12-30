@@ -8,6 +8,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\MovieLikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\WatchListController;
+use App\Http\Controllers\ElasticController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,6 +25,7 @@ Route::resources([
     'movies' => MovieController::class
 ]);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('elasticSearch', [ElasticController::class, 'ElasticSearch']);
 Route::group([
     'middleware' => 'auth:api'
 ], function() {

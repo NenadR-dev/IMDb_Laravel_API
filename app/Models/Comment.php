@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     public $table='comments';
 
@@ -16,6 +17,10 @@ class Comment extends Model
         'user_id',
         'movie_id'
     ];
+    public function searchableAs()
+    {
+        return 'comments_index';
+    }
     
     public function User()
     {
